@@ -1,14 +1,16 @@
 import React, { Fragment } from 'react';
-import { GlobalStyle, Container } from './styled';
-import StudentsList from './components/StudentsList';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { GlobalStyle } from './styled';
+import Routs from "./routes";
+
 
 function App() {
     return (
         <Fragment>
             <GlobalStyle/>
-            <Container>
-                <StudentsList/>
-            </Container>
+            <Router>
+                <Routs/>
+            </Router>
         </Fragment>
     );
 }

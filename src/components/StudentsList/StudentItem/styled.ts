@@ -20,9 +20,13 @@ export const FullName = styled(Item)`
 `;
 
 export const DateBirth = styled(Item)`
-    width: 100px;
+    width: 150px;
 `;
 
 export const Progress = styled(Item)`
+    width: 100px;
+`;
+
+export const Edit = styled(Item)`
     width: 100px;
 `;
