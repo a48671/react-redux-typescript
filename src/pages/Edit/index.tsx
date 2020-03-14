@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Container } from '../../styled';
-import { editStudent } from '../../store/actions';
+import Layout from "../../Layout";
+import { editStudent, removeStudent } from '../../store/actions';
 import { toDate } from '../../utils/toDate';
-import {IStudent, IStudentList} from '../../models/student';
-import Header from "../../components/Header";
+import { IStudent, IStudentList } from '../../models/student';
 
 interface IEditProps {
     students: IStudentList
     edit(student: IStudent): void,
+    remove(id: string): void
     match: {
         params: {
             student: string
@@ -17,10 +18,17 @@ interface IEditProps {
     }
 }
 
-const Edit: React.FC<IEditProps> = ({ edit, match, students }) => {
+const Edit: React.FC<IEditProps> = ({ edit, match, students, remove }) => {
+
+    if (!Object.keys(students).length) {
+        students = JSON.parse(localStorage.getItem('students') || '{}');
+    }
 
     const studentId: string = match.params.student;
-    const student: IStudent = students[studentId];
+
+    const history = useHistory();
+
+    const student: IStudent = students[studentId] || {};
 
     const [name, setName] = useState<string>(student.name);
     const [surname, setSurname] = useState<string>(student.surname);
@@ -41,10 +49,7 @@ const Edit: React.FC<IEditProps> = ({ edit, match, students }) => {
                 setPatronymic(value);
                 return;
         }
-        setName(event.target.value);
     };
-
-    const history = useHistory();
 
     const onClickEditHandler = (): void => {
         edit({
@@ -54,11 +59,29 @@ const Edit: React.FC<IEditProps> = ({ edit, match, students }) => {
             patronymic,
             dateBirth
         });
+        history.push('/')
     };
 
+    const onClickRemoveHandler = (): void => {
+        remove(studentId);
+        history.push('/')
+    };
+
+
+    // if invalid id students from url go to maim page
+    if (!Object.keys(student).length) {
+        return (
+            <Layout title='Edit'>
+                <Container>
+                    Student wes not found
+                    <div onClick={() => history.push('/')}>Go to student list</div>
+                </Container>
+            </Layout>
+        )
+    }
+
     return (
-        <div>
-            <Header title='Edit'/>
+        <Layout title='Edit'>
             <Container>
                 <input
                     type="text" value={name}
@@ -80,9 +103,10 @@ const Edit: React.FC<IEditProps> = ({ edit, match, students }) => {
                 />
                 <div>{toDate(dateBirth)}</div>
                 <button onClick={onClickEditHandler}>Edit</button>
+                <button onClick={onClickRemoveHandler}>Remove student</button>
                 <div onClick={() => history.push('/')}>Go to student list</div>
             </Container>
-        </div>
+        </Layout>
     );
 };
 
@@ -90,8 +114,9 @@ const mapStateToProps = (state: IStudentList): {students: IStudentList} => ({
     students: state
 });
 
-const mapDispatchToProps: Function = (dispatch: Function): object => ({
-    edit: (student: IStudent) => dispatch(editStudent(student))
+const mapDispatchToProps: Function = (dispatch: Function) => ({
+    edit: (student: IStudent) => dispatch(editStudent(student)),
+    remove: (id: string) => dispatch(removeStudent(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Edit);

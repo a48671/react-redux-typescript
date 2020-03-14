@@ -1,25 +1,41 @@
-import { ADD_STUDENT, EDIT_STUDENT } from '../actionTypes';
+import { ADD_STUDENT, GET_STUDENTS, EDIT_STUDENT, REMOVE_STUDENT } from '../actionTypes';
 import { IStudentList } from '../../models/student';
 import { IActionForReducer } from '../models';
 
-const initialState: IStudentList = {
-    dfdf: {id: 'dfdf', name: 'Name', surname: 'Surname', patronymic: 'Patronymic', dateBirth: new Date(), progress: 'fine'},
-    dfsdf: {id: 'dfsdf', name: 'Andrey', surname: 'Fomin', patronymic: 'Akexandrovich', dateBirth: new Date('1984-06-17'), progress: 'fine'}
-};
+const initialState: IStudentList = {};
 
 export default (state: IStudentList = initialState, action: IActionForReducer): IStudentList => {
     const { type, payload } = action;
     switch (type) {
-        case ADD_STUDENT :
+
+        case GET_STUDENTS :
             return ({
+                ...payload
+            });
+
+        case ADD_STUDENT : {
+            const students = {
                 ...state,
                 [payload.id]: payload
-            })
-        case EDIT_STUDENT : {
-            const newState = {...state};
-            newState[payload.id] = payload;
-            return newState;
+            }
+            localStorage.setItem('students', JSON.stringify(students));
+            return students;
         }
+
+        case EDIT_STUDENT : {
+            const students = {...state};
+            students[payload.id] = payload;
+            localStorage.setItem('students', JSON.stringify(students));
+            return students;
+        }
+
+        case REMOVE_STUDENT : {
+            const students = {...state};
+            delete students[payload];
+            localStorage.setItem('students', JSON.stringify(students));
+            return students;
+        }
+
         default :
             return state;
     }

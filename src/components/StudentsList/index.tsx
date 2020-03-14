@@ -9,6 +9,7 @@ interface IStudentsListProps {
 }
 
 const StudentsList: React.FC<IStudentsListProps> = ({students}) => {
+
     const studentsKeys: string[] = Object.keys(students);
     if (!studentsKeys.length) {
         return (
