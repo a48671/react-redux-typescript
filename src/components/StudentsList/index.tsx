@@ -1,29 +1,42 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Wrapper } from './styled';
 import StudentItem from "./StudentItem";
-import { IStudent } from '../../models/student';
+import { IStudentList, IStudent } from '../../models/student';
 
-const students: IStudent[] = [
-    {id: 'sda', name: 'Name', surname: 'Surname', patronymic: 'Patronymic', dateBirth: new Date(), progress: 'fine'},
-    {id: 'sszds', name: 'Andrey', surname: 'Fomin', patronymic: 'Akexandrovich', dateBirth: new Date('1984-06-17'), progress: 'fine'}
-];
+interface IStudentsListProps {
+    students: IStudentList
+}
 
-const StudentsList = () => {
+const StudentsList: React.FC<IStudentsListProps> = ({students}) => {
+    const studentsKeys: string[] = Object.keys(students);
+    if (!studentsKeys.length) {
+        return (
+            <Wrapper>No students yet</Wrapper>
+        );
+    }
     return (
         <Wrapper>
-            {students.map(student => (
-                <StudentItem
-                    key={student.id}
-                    id={student.id}
-                    patronymic={student.patronymic}
-                    name={student.name}
-                    surname={student.surname}
-                    dateBirth={student.dateBirth}
-                    progress={student.progress}
-                />
-            ))}
+            {studentsKeys.map(key => {
+                const student: IStudent = students[key];
+                return (
+                    <StudentItem
+                        key={key}
+                        id={student.id}
+                        patronymic={student.patronymic}
+                        name={student.name}
+                        surname={student.surname}
+                        dateBirth={student.dateBirth}
+                        progress={student.progress}
+                    />
+                )
+            })}
         </Wrapper>
     );
 };
 
-export default StudentsList;
+const mapStateToProps = (state: IStudentList): {students: IStudentList} => ({
+    students: state
+});
+
+export default connect(mapStateToProps)(StudentsList);

@@ -2,14 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { IStudent } from '../../../models/student';
 import { Wrapper, FullName, DateBirth, Progress, Edit } from './styled';
-
-const toDate = function(date: Date): string {
-    return new Intl.DateTimeFormat('ru-RU', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    }).format(date);
-};
+import { toDate } from '../../../utils/toDate';
 
 const StudentItem: React.FC<IStudent> = ({id, name, surname, patronymic, dateBirth, progress}) => {
     return (

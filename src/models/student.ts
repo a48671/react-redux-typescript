@@ -6,3 +6,7 @@ export interface IStudent {
     dateBirth: Date,
     progress?: 'fine' | 'well' | 'satisfactorily' | 'unsatisfactorily'
 }
+
+export interface IStudentList {
+    [key: string]: IStudent
+}
