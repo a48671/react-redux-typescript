@@ -1,11 +1,13 @@
 import React from 'react';
-import { Wrapper } from './styled';
+import { Wrapper, Title } from './styled';
 import { Container } from '../../styled';
 
-const Header: React.FC<{title: string}> = ({title}) => {
+const Header: React.FC<{title: string}> = ({title}): React.ReactElement => {
     return (
         <Wrapper>
-            <Container>{title}</Container>
+            <Container>
+                <Title>{title}</Title>
+            </Container>
         </Wrapper>
     );
 };
