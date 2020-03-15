@@ -6,9 +6,9 @@ import Add from "./pages/Add";
 
 const Routs: React.FC = () => (
     <Switch>
-        <Route path='/' component={Students} exact/>
         <Route path='/add/'  component={Add}/>
         <Route path='/edit/:student'  component={Edit}/>
+        <Route path='/'  component={Students}/>
     </Switch>
 );
 
